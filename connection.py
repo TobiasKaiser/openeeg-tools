@@ -16,7 +16,8 @@ import serial
 
 PACKET_LENGTH = 17
 
-class OpenEEGReader:
+
+class OpenEEGReader(object):
     def __init__(self, serial_port):
         self.port = serial_port
 
@@ -27,6 +28,9 @@ class OpenEEGReader:
             = struct.unpack(">BBBBHHHHHHB",buf)
         if not (sync0 == 0xA5 and sync1 == 0x5A):
             raise Exception("OpenEEG sync lost.")
+        self.handle_data(data)
+
+    def handle_data(self, data):
         print(data)
 
     def run(self):
