@@ -26,7 +26,7 @@ class LiveViewer(object):
             self.live_viewer = live_viewer
 
         def handle_data(self, data):
-            for chan_idx in range(6):
+            for chan_idx in range(2):
                 self.live_viewer.buf[chan_idx][self.live_viewer.buf_ptr[chan_idx]] = data[chan_idx]
                 self.live_viewer.buf_ptr[chan_idx] = \
                     (self.live_viewer.buf_ptr[chan_idx] + 1) % self.live_viewer.BUFFER_SIZE 
@@ -43,7 +43,7 @@ class LiveViewer(object):
     def update_window(self):
         self.window.fill(WHITE)
 
-        for chan_idx in range(6):
+        for chan_idx in range(2):
 
             for i in range(self.BUFFER_SIZE-1):
                 size = 100.0
@@ -51,8 +51,8 @@ class LiveViewer(object):
                 scale_factor = size / self.FULL_SCALE
 
                 pygame.draw.line(self.window, BLUE,
-                    (i,   size*chan_idx + size - scale_factor * self.buf[chan_idx][(i-self.buf_ptr[chan_idx])%self.BUFFER_SIZE]),
-                    (i+1, size*chan_idx + size - scale_factor * self.buf[chan_idx][(i+1-self.buf_ptr[chan_idx])%self.BUFFER_SIZE]),
+                    (i,   size*chan_idx + size - scale_factor * self.buf[chan_idx][(self.buf_ptr[chan_idx]-i)%self.BUFFER_SIZE]),
+                    (i+1, size*chan_idx + size - scale_factor * self.buf[chan_idx][(self.buf_ptr[chan_idx]-i-1)%self.BUFFER_SIZE]),
                     1)
         pygame.display.update()
 
